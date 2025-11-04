@@ -381,18 +381,10 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 
 **Geliştirici Adı**
 
-- 🌐 Website: [website.com](https://website.com)
-- 📧 Email: email@example.com
-- 💼 LinkedIn: [linkedin.com/in/profile](https://linkedin.com/in/profile)
-- 🐙 GitHub: [@username](https://github.com/username)
-
----
-
-## 🙏 Acknowledgments
-
-- Bootstrap ekibine harika UI framework'ü için teşekkürler
-- Bootstrap Icons'a zengin ikon seti için teşekkürler
-- Tüm açık kaynak topluluğuna katkıları için teşekkürler
+- 🌐 Website: [erdemskywalker.site](https://erdemskywalker.site)
+- 📧 Email: turanerdeyusuf28@gmail.com
+- 💼 LinkedIn: [linkedin.com/in/erdemskywalker](https://linkedin.com/in/erdemskywalker)
+- 🐙 GitHub: [@username](https://github.com/erdemskywalker)
 
 ---
 
@@ -400,9 +392,9 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 
 Sorularınız veya önerileriniz için:
 
-- 📧 **Email**: support@example.com
-- 💬 **Issues**: [GitHub Issues](https://github.com/kullaniciadi/market-otomasyon/issues)
-- 📖 **Documentation**: [Wiki](https://github.com/kullaniciadi/market-otomasyon/wiki)
+- 📧 **Email**: turanerdeyusuf28@gmail.com
+- 💬 **Issues**: [GitHub Issues](https://github.com/erdemskywalker/market-otomasyon/)
+- 📖 **Documentation**: [Wiki](https://github.com/erdemskywalker/market-otomasyon/)
 
 ---
 
