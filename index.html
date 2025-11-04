@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Market Ödeme Otomasyonu</title>
+  <!-- Bootstrap 5 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    :root{
+      --primary:#0d6efd; --success:#198754; --danger:#dc3545; --warning:#ffc107; --info:#0dcaf0;
+      --dark:#212529; --light:#f8f9fa; --muted:#6c757d;
+      --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    *{box-sizing:border-box; margin:0; padding:0}
+    html,body{min-height:100vh}
+    body{
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--gradient-1);
+      color:#212529; padding:20px;
+    }
+    
+    /* Modern Header */
+    .header-card{
+      background:#fff;
+      border-radius:16px;
+      padding:20px;
+      margin-bottom:24px;
+      box-shadow:0 10px 40px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .brand{display:flex;gap:15px;align-items:center}
+    .logo{
+      width:60px;
+      height:60px;
+      border-radius:16px;
+      background:linear-gradient(135deg,#0d6efd,#6610f2);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:28px;
+      color:#fff;
+      font-weight:bold;
+      box-shadow: 0 8px 16px rgba(13, 110, 253, 0.4);
+      transition: transform 0.3s ease;
+    }
+    .logo:hover{transform: scale(1.1) rotate(5deg);}
+    h1{font-size:24px;margin:0;font-weight:800;color:#212529;letter-spacing:-0.5px}
+    p.lead{margin:4px 0 0 0;color:#6c757d;font-size:13px}
+    
+    /* Quick Nav Buttons */
+    .quick-nav{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap}
+    .quick-nav .btn{
+      border-radius:12px;
+      padding:10px 20px;
+      font-weight:600;
+      transition: all 0.3s ease;
+      border:none;
+    }
+    .quick-nav .btn:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .btn-success{background:linear-gradient(135deg, #52c234 0%, #198754 100%)}
+    .btn-warning{background:linear-gradient(135deg, #ffd89b 0%, #ffc107 100%);color:#212529}
+    .btn-primary{background:linear-gradient(135deg, #667eea 0%, #764ba2 100%)}
+    .btn-danger{background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%)}
+    .btn-info{background:linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)}
+    
+    /* Modern Cards */
+    .modern-card{
+      background:#fff;
+      border-radius:20px;
+      box-shadow:0 10px 40px rgba(0,0,0,0.15);
+      border:none;
+      overflow:hidden;
+      transition: all 0.3s ease;
+      height:100%;
+    }
+    .modern-card:hover{
+      box-shadow:0 15px 50px rgba(0,0,0,0.25);
+    }
+    .modern-card .card-header{
+      border:none;
+      padding:20px;
+      font-weight:700;
+    }
+    .modern-card .card-body{padding:25px}
+    
+    /* Compact Card Styles */
+    .card{
+      border-radius:20px;
+      box-shadow:0 10px 40px rgba(0,0,0,0.15);
+      border:none;
+      overflow:hidden;
+      transition: all 0.3s ease;
+    }
+    .card:hover{
+      box-shadow:0 15px 50px rgba(0,0,0,0.25);
+    }
+    .card .card-header{
+      border:none;
+      padding:12px 20px;
+      font-weight:700;
+    }
+    .card .card-header h5,
+    .card .card-header h6{
+      font-size:15px;
+      margin:0;
+    }
+    .card .card-body{
+      padding:20px;
+    }
+    .card.shadow-lg{
+      box-shadow:0 10px 40px rgba(0,0,0,0.15) !important;
+    }
+    
+    /* Product Grid */
+    .product-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+      gap:15px;
+    }
+    .product-card-item{
+      background:#fff;
+      border-radius:16px;
+      padding:15px;
+      border:2px solid #e9ecef;
+      transition: all 0.3s ease;
+      cursor:pointer;
+      text-align:center;
+    }
+    .product-card-item:hover{
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+      border-color:#667eea;
+    }
+    
+    /* Cart Items */
+    .cart-item{
+      background:linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+      border-radius:12px;
+      padding:15px;
+      margin-bottom:12px;
+      border-left:4px solid #667eea;
+      transition: all 0.3s ease;
+      animation: slideInRight 0.3s ease;
+    }
+    .cart-item:hover{
+      transform: translateX(5px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .cart-item .title{font-weight:700;font-size:16px;color:#212529}
+    .cart-item .barcode{font-size:12px;color:#6c757d}
+    
+    /* Total Card */
+    .total-card{
+      background:linear-gradient(135deg,#667eea,#764ba2);
+      color:#fff;
+      border-radius:16px;
+      padding:20px;
+      margin-top:20px;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+    .total-amount{font-size:32px;font-weight:900;text-shadow:2px 2px 4px rgba(0,0,0,0.2)}
+    
+    /* Form Styling */
+    .form-control, .form-select{
+      border-radius:12px;
+      border:2px solid #e9ecef;
+      padding:12px 16px;
+      transition: all 0.3s ease;
+      font-size:15px;
+    }
+    .form-control:focus, .form-select:focus{
+      border-color:#667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      transform: scale(1.01);
+    }
+    
+    /* Buttons */
+    .btn{
+      border-radius:12px;
+      padding:12px 24px;
+      font-weight:600;
+      transition: all 0.3s ease;
+      border:none;
+    }
+    .btn-sm{padding:8px 16px;font-size:14px}
+    .btn-lg{padding:16px 32px;font-size:16px}
+    .btn:hover{transform: translateY(-2px);box-shadow: 0 6px 20px rgba(0,0,0,0.2)}
+    .btn:active{transform: translateY(0)}
+    
+    /* Alerts */
+    .alert{
+      border-radius:12px;
+      border:none;
+      padding:12px 16px;
+      animation: slideInDown 0.3s ease;
+      font-size:14px;
+    }
+    .alert small{
+      font-size:13px;
+    }
+    @keyframes slideInDown {
+      from {opacity: 0; transform: translateY(-20px)}
+      to {opacity: 1; transform: translateY(0)}
+    }
+    @keyframes slideInRight {
+      from {opacity: 0; transform: translateX(-20px)}
+      to {opacity: 1; transform: translateX(0)}
+    }
+    
+    .badge{
+      padding:6px 12px;
+      border-radius:8px;
+      font-weight:600;
+      font-size:12px;
+    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar {width: 8px; height: 8px}
+    ::-webkit-scrollbar-track {background: #f1f1f1; border-radius: 10px}
+    ::-webkit-scrollbar-thumb {background: #667eea; border-radius: 10px}
+    ::-webkit-scrollbar-thumb:hover {background: #764ba2}
+    
+    /* Responsive */
+    @media (max-width:768px){
+      body{padding:12px}
+      h1{font-size:20px}
+      .quick-nav{justify-content:center}
+      .quick-nav .btn{flex:1;min-width:140px}
+      .product-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+      .modern-card .card-body{padding:20px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="header-card">
+      <div class="d-flex justify-content-between align-items-center flex-wrap">
+        <div class="brand">
+          <div class="logo"><i class="bi bi-cart-check-fill"></i></div>
+          <div>
+            <h1>Market Ödeme Otomasyonu</h1>
+            <p class="lead">Hızlı barkod okutma, elle giriş ve şeffaf sepet yönetimi</p>
+          </div>
+        </div>
+        <div class="text-end">
+          <h3 class="mb-0 text-primary" id="headerTotal">Toplam: 0.00 ₺</h3>
+          <p class="text-muted mb-0"><i class="bi bi-bag-fill"></i> <span id="headerCount">Ürün: 0</span></p>
+        </div>
+      </div>
+      <!-- Quick Navigation -->
+      <div class="quick-nav">
+        <a href="add-product.html" class="btn btn-success">
+          <i class="bi bi-plus-circle-fill"></i> Yeni Ürün Ekle
+        </a>
+        <a href="edit-product.html" class="btn btn-warning text-dark">
+          <i class="bi bi-pencil-square"></i> Ürün Düzenle
+        </a>
+        <a href="categories.html" class="btn btn-info">
+          <i class="bi bi-bookmarks-fill"></i> Kategoriler
+        </a>
+        <a href="sales-report.html" class="btn btn-success">
+          <i class="bi bi-graph-up-arrow"></i> Satış Raporları
+        </a>
+        <a href="credit-sales.html" class="btn btn-warning text-dark">
+          <i class="bi bi-cash-coin"></i> Veresiyeler
+        </a>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <!-- Sol Panel: Barkod Okuyucu ve Hızlı Ekle -->
+      <div class="col-lg-5">
+        <div class="card shadow-lg mb-3">
+          <div class="card-header bg-primary text-white">
+            <h6 class="mb-0"><i class="bi bi-upc-scan"></i> Barkod Okuyucu</h6>
+          </div>
+          <div class="card-body">
+            <div class="alert alert-info d-flex align-items-center py-2 mb-2" role="alert">
+              <i class="bi bi-info-circle-fill me-2"></i>
+              <small id="scannerStatus">Barkod okumaya hazır</small>
+            </div>
+
+            <label class="form-label fw-bold mb-1" style="font-size: 13px"><i class="bi bi-upc-scan"></i> Barkod Girişi</label>
+            <div class="input-group mb-2">
+              <span class="input-group-text bg-white"><i class="bi bi-upc"></i></span>
+              <input id="barcodeInput" class="form-control" placeholder="Barkodu okutun veya yazın" autofocus />
+              <button id="addManual" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle-fill"></i> Ekle</button>
+            </div>
+
+            <div class="alert alert-light py-1 mb-2">
+              <small><strong><i class="bi bi-clock-history"></i> Son okutulan:</strong> <span id="lastCode" class="text-primary fw-bold">—</span></small>
+            </div>
+
+            <hr class="my-2">
+            
+            <label class="form-label fw-bold mb-1" style="font-size: 13px"><i class="bi bi-lightning-charge-fill"></i> Hızlı Fiyat Ekleme</label>
+            <div class="row g-2 mb-2">
+              <div class="col-7">
+                <input id="quickName" class="form-control form-control-sm" placeholder="Ürün adı" />
+              </div>
+              <div class="col-5">
+                <input id="quickPrice" class="form-control form-control-sm" placeholder="Fiyat ₺" />
+              </div>
+            </div>
+            <button id="quickAdd" class="btn btn-warning btn-sm w-100"><i class="bi bi-cart-plus-fill"></i> Hızlı Ekle</button>
+          </div>
+        </div>
+
+        <div class="card shadow-lg">
+          <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h6 class="mb-0"><i class="bi bi-grid-3x3-gap-fill"></i> Ürün Kataloğu</h6>
+            <span class="badge bg-light text-dark"><i class="bi bi-box-seam"></i> <span id="productCount">0</span> Ürün</span>
+          </div>
+          <div class="card-body">
+            <div class="input-group search-box mb-2">
+              <span class="input-group-text bg-white border-0"><i class="bi bi-search"></i></span>
+              <input id="search" class="form-control border-0" placeholder="Ürün ara..." style="border:2px solid #e9ecef !important;border-radius:0 12px 12px 0 !important" />
+            </div>
+            <div class="mb-2">
+              <select id="categoryFilter" class="form-select form-select-sm" style="border-radius:12px">
+                <option value="">Tüm Kategoriler</option>
+              </select>
+            </div>
+            <div class="product-grid" id="catalog" style="max-height:280px;overflow-y:auto"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sağ Panel: Sepet -->
+      <div class="col-lg-7">
+        <div class="card shadow-lg">
+          <div class="card-header bg-info text-white">
+            <h6 class="mb-0"><i class="bi bi-cart-fill"></i> Alışveriş Sepeti</h6>
+          </div>
+          <div class="card-body">
+            <div id="cartList" style="max-height:350px;overflow-y:auto"></div>
+            
+            <div class="total-card mt-3 py-3 px-3">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span style="font-size: 14px"><i class="bi bi-calculator"></i> Ara Toplam:</span>
+                <span class="fs-6 fw-bold" id="subtotal">0.00 ₺</span>
+              </div>
+              <hr class="bg-white opacity-25 my-2">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="fs-5 fw-bold"><i class="bi bi-cash-stack"></i> Toplam:</span>
+                <span class="total-amount" style="font-size: 28px" id="total">0.00 ₺</span>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 mt-3">
+              <button id="payBtn" class="btn btn-success">
+                <i class="bi bi-credit-card-fill"></i> Ödemeyi Tamamla
+              </button>
+              <button id="creditBtn" class="btn btn-warning text-dark">
+                <i class="bi bi-cash-coin"></i> Veresiye Yaz
+              </button>
+              <button id="clearCart" class="btn btn-danger btn-sm">
+                <i class="bi bi-trash-fill"></i> Sepeti Temizle
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // --- Data / Products ---
+    let products = [];
+    let categories = [];
+
+    // JSON dosyasından ürünleri ve kategorileri yükle
+    async function loadProducts() {
+      try {
+        const response = await fetch('products.json');
+        if (!response.ok) throw new Error('Ürünler yüklenemedi');
+        products = await response.json();
+        
+        const catResponse = await fetch('categories.json');
+        if (catResponse.ok) {
+          categories = await catResponse.json();
+          renderCategoryFilter();
+        }
+        
+        renderCatalog();
+        console.log('Ürünler başarıyla yüklendi:', products.length, 'adet');
+      } catch (error) {
+        console.error('Ürünler yüklenirken hata:', error);
+        flashStatus('Ürünler yüklenemedi! Lütfen products.json dosyasını kontrol edin.', false);
+      }
+    }
+
+    // Kategori filtresini doldur
+    function renderCategoryFilter() {
+      const filter = document.getElementById('categoryFilter');
+      filter.innerHTML = '<option value="">Tüm Kategoriler</option>';
+      
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.name;
+        option.textContent = cat.name;
+        filter.appendChild(option);
+      });
+    }
+
+    // --- Catalog render ---
+    const catalogEl = document.getElementById('catalog');
+    const productCountEl = document.getElementById('productCount');
+    function renderCatalog(filter='', categoryFilter=''){
+      catalogEl.innerHTML = '';
+      let list = products.filter(p => {
+        const matchesSearch = (p.name+p.desc+p.barcode).toLowerCase().includes(filter.toLowerCase());
+        const matchesCategory = !categoryFilter || p.category === categoryFilter;
+        return matchesSearch && matchesCategory;
+      });
+      
+      productCountEl.textContent = list.length;
+      
+      if(list.length === 0){
+        catalogEl.innerHTML = `
+          <div class="text-center py-5" style="grid-column: 1/-1">
+            <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
+            <p class="text-muted">${filter || categoryFilter ? 'Arama sonucu bulunamadı' : 'Henüz ürün eklenmemiş'}</p>
+          </div>
+        `;
+        return;
+      }
+      
+      // Kategori filtreleme yoksa kategorilere göre grupla
+      if (!categoryFilter) {
+        // Ürünleri kategorilere göre grupla
+        const groupedByCategory = {};
+        list.forEach(p => {
+          const catName = p.category || 'Genel';
+          if (!groupedByCategory[catName]) {
+            groupedByCategory[catName] = [];
+          }
+          groupedByCategory[catName].push(p);
+        });
+        
+        // Her kategori için başlık ve ürünleri render et
+        let productIndex = 0;
+        Object.keys(groupedByCategory).sort().forEach(catName => {
+          const category = categories.find(c => c.name === catName);
+          const productsInCategory = groupedByCategory[catName];
+          
+          // Kategori başlığı
+          const categoryHeader = document.createElement('div');
+          categoryHeader.style.cssText = 'grid-column: 1/-1; margin-top: 15px; margin-bottom: 10px; padding: 8px 12px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 10px; border-left: 4px solid ' + (category ? category.color : '#667eea');
+          categoryHeader.innerHTML = `
+            <div class="d-flex align-items-center gap-2">
+              <div style="width:30px;height:30px;background:${category ? category.color : '#667eea'};border-radius:8px;display:flex;align-items:center;justify-content:center">
+                <i class="${category ? category.icon : 'bi bi-box-seam'} text-white fs-6"></i>
+              </div>
+              <h6 class="mb-0 fw-bold" style="color:#212529;font-size:14px">${catName}</h6>
+              <span class="badge bg-secondary ms-auto" style="font-size:10px">${productsInCategory.length} ürün</span>
+            </div>
+          `;
+          catalogEl.appendChild(categoryHeader);
+          
+          // Kategorideki ürünler
+          productsInCategory.forEach(p => {
+            const categoryBadge = category 
+              ? `<span class="badge mb-2" style="background-color: ${category.color};font-size:9px"><i class="${category.icon}"></i> ${catName}</span>`
+              : `<span class="badge bg-secondary mb-2" style="font-size:9px">${catName}</span>`;
+            
+            const card = document.createElement('div'); 
+            card.className='product-card-item';
+            card.style.animation = `slideInDown 0.3s ease ${productIndex * 0.05}s both`;
+            card.innerHTML = `
+              <div class="mb-2">
+                <div style="width:50px;height:50px;margin:0 auto 10px;background:${category ? category.color : 'linear-gradient(135deg,#667eea,#764ba2)'};border-radius:12px;display:flex;align-items:center;justify-content:center">
+                  <i class="${category ? category.icon : 'bi bi-box-seam'} text-white fs-4"></i>
+                </div>
+                <h6 class="fw-bold mb-1" style="color:#667eea;font-size:14px">${p.name}</h6>
+                ${categoryBadge}
+                <p class="text-muted small mb-2" style="font-size:11px;min-height:30px">${p.desc || 'Ürün açıklaması'}</p>
+                <span class="badge bg-dark mb-2" style="font-size:10px">${p.barcode}</span>
+                <h5 class="text-success fw-bold mb-3">${p.price.toFixed(2)} ₺</h5>
+                <div class="mb-1"><small class="text-muted">Stok: <strong>${typeof p.stock !== 'undefined' ? p.stock : '—'}</strong></small></div>
+              </div>
+              <div class="d-flex gap-1 align-items-center">
+                <input type="number" min="1" value="1" class="form-control form-control-sm" style="width:50px;font-size:13px" id="qty_${p.id}" />
+                <button class="btn btn-primary btn-sm flex-fill" data-id="${p.id}" style="font-size:12px" ${ (typeof p.stock !== 'undefined' && p.stock <= 0) ? 'disabled' : '' }><i class="bi bi-cart-plus"></i> ${(typeof p.stock !== 'undefined' && p.stock <= 0) ? 'Tükendi' : 'Ekle'}</button>
+              </div>
+            `;
+            catalogEl.appendChild(card);
+            productIndex++;
+          });
+        });
+      } else {
+        // Belirli bir kategori seçiliyse, sadece o kategorinin ürünlerini göster (başlık olmadan)
+        list.forEach((p, index) => {
+          const category = categories.find(c => c.name === p.category);
+          const categoryBadge = category 
+            ? `<span class="badge mb-2" style="background-color: ${category.color};font-size:9px"><i class="${category.icon}"></i> ${p.category}</span>`
+            : `<span class="badge bg-secondary mb-2" style="font-size:9px">${p.category || 'Genel'}</span>`;
+          
+          const card = document.createElement('div'); 
+          card.className='product-card-item';
+          card.style.animation = `slideInDown 0.3s ease ${index * 0.05}s both`;
+          card.innerHTML = `
+            <div class="mb-2">
+              <div style="width:50px;height:50px;margin:0 auto 10px;background:${category ? category.color : 'linear-gradient(135deg,#667eea,#764ba2)'};border-radius:12px;display:flex;align-items:center;justify-content:center">
+                <i class="${category ? category.icon : 'bi bi-box-seam'} text-white fs-4"></i>
+              </div>
+              <h6 class="fw-bold mb-1" style="color:#667eea;font-size:14px">${p.name}</h6>
+              ${categoryBadge}
+              <p class="text-muted small mb-2" style="font-size:11px;min-height:30px">${p.desc || 'Ürün açıklaması'}</p>
+              <span class="badge bg-dark mb-2" style="font-size:10px">${p.barcode}</span>
+              <h5 class="text-success fw-bold mb-3">${p.price.toFixed(2)} ₺</h5>
+                <div class="mb-1"><small class="text-muted">Stok: <strong>${typeof p.stock !== 'undefined' ? p.stock : '—'}</strong></small></div>
+            </div>
+            <div class="d-flex gap-1 align-items-center">
+              <input type="number" min="1" value="1" class="form-control form-control-sm" style="width:50px;font-size:13px" id="qty_${p.id}" />
+              <button class="btn btn-primary btn-sm flex-fill" data-id="${p.id}" style="font-size:12px" ${ (typeof p.stock !== 'undefined' && p.stock <= 0) ? 'disabled' : '' }><i class="bi bi-cart-plus"></i> ${(typeof p.stock !== 'undefined' && p.stock <= 0) ? 'Tükendi' : 'Ekle'}</button>
+            </div>
+          `;
+          catalogEl.appendChild(card);
+        });
+      }
+
+      // attach handlers
+      catalogEl.querySelectorAll('button[data-id]').forEach(b => b.addEventListener('click', (e)=>{
+        const id = +e.currentTarget.dataset.id;
+        const qty = +document.getElementById('qty_'+id).value || 1;
+        const prod = products.find(x=>x.id===id);
+        if(prod) {
+          const inCart = cart[id] ? cart[id].qty : 0;
+          const available = typeof prod.stock !== 'undefined' ? (prod.stock - inCart) : Infinity;
+          if (available <= 0) { flashStatus('Bu ürünün stoğu yok', false); return; }
+          if (qty > available) { flashStatus('Yeterli stok yok. Mevcut: ' + available, false); return; }
+          addToCart(prod, qty);
+        }
+      }));
+    }
+
+    // --- Cart ---
+    const cartListEl = document.getElementById('cartList');
+    let cart = {}; // id => {product, qty}
+
+    function saveCart(){ sessionStorage.setItem('demo_cart', JSON.stringify(cart)); }
+    function loadCart(){ try{ cart = JSON.parse(sessionStorage.getItem('demo_cart'))||{} }catch(e){cart={}} }
+
+    function addToCart(product, qty=1){
+      const key = product.id;
+      // stok kontrol (ürün ID'li ürünler için)
+      if (product.id && typeof product.stock !== 'undefined') {
+        const current = cart[key] ? cart[key].qty : 0;
+        if (current + qty > product.stock) {
+          flashStatus('Stok yetersiz. Mevcut: ' + product.stock, false);
+          return;
+        }
+      }
+      if(cart[key]) cart[key].qty += qty; else cart[key] = {product, qty};
+      renderCart(); saveCart();
+    }
+
+    function setQty(id, qty){ if(cart[id]){ cart[id].qty = qty; if(cart[id].qty<=0) delete cart[id]; renderCart(); saveCart(); }}
+    function removeItem(id){ delete cart[id]; renderCart(); saveCart(); }
+
+    function renderCart(){
+      cartListEl.innerHTML = '';
+      let subtotal = 0; let totalCount = 0;
+      const cartArray = Object.values(cart);
+      
+      if(cartArray.length === 0){
+        cartListEl.innerHTML = `
+          <div class="text-center py-5">
+            <i class="bi bi-cart-x fs-1 text-muted d-block mb-3"></i>
+            <h6 class="text-muted">Sepetiniz boş</h6>
+            <p class="small text-muted">Ürün eklemek için barkod okutun veya katalogdan seçin</p>
+          </div>
+        `;
+      } else {
+        cartArray.forEach((item, index) => {
+          const p = item.product; const q = item.qty; const line = p.price*q; subtotal += line; totalCount += q;
+          const el = document.createElement('div'); 
+          el.className='cart-item';
+          el.style.animationDelay = `${index * 0.05}s`;
+          el.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="flex-grow-1">
+                <h6 class="title mb-1">${p.name}</h6>
+                <small class="barcode"><i class="bi bi-upc"></i> ${p.barcode ? p.barcode : 'Hızlı ürün'}</small>
+              </div>
+              <div class="d-flex gap-2 align-items-center">
+                <div class="btn-group" role="group">
+                  <button class="btn btn-sm btn-outline-secondary dec">−</button>
+                  <button class="btn btn-sm btn-outline-primary disabled" style="pointer-events:none;min-width:45px">${q}</button>
+                  <button class="btn btn-sm btn-outline-secondary inc">+</button>
+                </div>
+                <div class="text-end" style="min-width:110px">
+                  <div class="fw-bold text-success fs-5">${line.toFixed(2)} ₺</div>
+                  <button class="btn btn-sm btn-link text-danger remove p-0" style="font-size:12px"><i class="bi bi-trash"></i> Sil</button>
+                </div>
+              </div>
+            </div>
+          `;
+          cartListEl.appendChild(el);
+
+          el.querySelector('.inc').addEventListener('click',()=> setQty(p.id, item.qty+1));
+          el.querySelector('.dec').addEventListener('click',()=> setQty(p.id, item.qty-1));
+          el.querySelector('.remove').addEventListener('click',()=> removeItem(p.id));
+        });
+      }
+      
+      document.getElementById('subtotal').textContent = subtotal.toFixed(2)+' ₺';
+      document.getElementById('total').textContent = subtotal.toFixed(2)+' ₺';
+      document.getElementById('headerTotal').textContent = 'Toplam: '+subtotal.toFixed(2)+' ₺';
+      document.getElementById('headerCount').textContent = 'Ürün: '+totalCount;
+    }
+
+    // --- Clear cart ---
+    document.getElementById('clearCart').addEventListener('click', ()=> {
+      if(Object.keys(cart).length === 0){
+        return;
+      }
+      if(confirm('🗑️ Sepeti Temizle\n\nTüm ürünler sepetten kaldırılacak.\nDevam etmek istiyor musunuz?')){
+        cart = {}; renderCart(); saveCart();
+        flashStatus('Sepet başarıyla temizlendi', true);
+      }
+    });
+
+    // --- Manual barcode mapping ---
+    const barcodeInput = document.getElementById('barcodeInput');
+    const addManual = document.getElementById('addManual');
+    const lastCode = document.getElementById('lastCode');
+
+    addManual.addEventListener('click', ()=> handleBarcode(barcodeInput.value.trim()));
+    barcodeInput.addEventListener('keydown', e=>{ if(e.key==='Enter') handleBarcode(barcodeInput.value.trim()); });
+
+    function handleBarcode(code){ 
+      if(!code) return; 
+      lastCode.textContent = code; 
+      barcodeInput.value='';
+      const prod = products.find(p=>p.barcode===code);
+      if(prod){ 
+        const inCart = cart[prod.id] ? cart[prod.id].qty : 0;
+        if (typeof prod.stock !== 'undefined' && inCart + 1 > prod.stock) {
+          flashStatus(`❌ Yeterli stok yok: ${prod.name}`, false);
+        } else {
+          addToCart(prod,1); 
+          flashStatus(`✅ Ürün bulundu: ${prod.name}`, true); 
+        }
+      } else {
+        flashStatus(`❌ Ürün bulunamadı: ${code}`, false);
+      }
+    }
+
+    function flashStatus(msg, ok=true){ 
+      const st = document.getElementById('scannerStatus'); 
+      const alertEl = st.parentElement;
+      st.innerHTML = `<i class="bi ${ok ? 'bi-check-circle-fill' : 'bi-x-circle-fill'}"></i> ${msg}`;
+      alertEl.className = ok ? 'alert alert-success d-flex align-items-center py-2 mb-2' : 'alert alert-danger d-flex align-items-center py-2 mb-2';
+      setTimeout(()=>{ 
+        st.innerHTML = '<i class="bi bi-info-circle-fill me-2"></i> Barkod okumaya hazır';
+        alertEl.className = 'alert alert-info d-flex align-items-center py-2 mb-2';
+      }, 2500);
+    }
+
+    // --- Payment button ---
+    document.getElementById('payBtn').addEventListener('click', async ()=>{
+      if(Object.keys(cart).length === 0){
+        return;
+      }
+      const total = document.getElementById('total').textContent;
+      const itemCount = Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
+      if(!confirm(`💳 Ödeme Onayı\n\n📦 Ürün Sayısı: ${itemCount} adet\n💰 Toplam Tutar: ${total}\n\nÖdemeyi onaylıyor musunuz?`)) return;
+
+      // Hazırla: sadece gerçek ürün ID'leri ile (geçici hızlı ekleme ürünleri hariç)
+      // Hızlı ekleme ürünleri string ID'ye sahip (quick_timestamp), bunları filtrele
+      const items = Object.values(cart)
+        .filter(item => typeof item.product.id === 'number' && item.product.id > 0)
+        .map(item => ({ id: item.product.id, qty: item.qty }));
+
+      // Eğer sadece hızlı ekleme ürünleri varsa, API çağrısı yapmadan tamamla
+      if (items.length === 0) {
+        cart = {}; renderCart(); saveCart();
+        flashStatus('Ödeme tamamlandı! Sepet temizlendi.', true);
+        return;
+      }
+
+      try {
+        const resp = await fetch('api.php?action=purchase', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ items })
+        });
+        const result = await resp.json();
+        if (!result.success) throw new Error(result.message || 'Satın alma hatası');
+
+        cart = {}; renderCart(); saveCart();
+        flashStatus('Ödeme tamamlandı! Sepet temizlendi.', true);
+
+        // Yeniden yükle: güncel stokları göster
+        await loadProducts();
+        renderCatalog(document.getElementById('search').value, document.getElementById('categoryFilter').value);
+      } catch (error) {
+        flashStatus('Ödeme hatası: ' + error.message, false);
+        try { await loadProducts(); renderCatalog(); } catch(e){}
+      }
+    });
+
+    // --- Credit (Veresiye) button ---
+    document.getElementById('creditBtn').addEventListener('click', async ()=>{
+      if(Object.keys(cart).length === 0){
+        return;
+      }
+
+      // Müşteri bilgilerini al
+      const customerName = prompt('👤 Müşteri Adı:\n\n(Zorunlu)');
+      if (!customerName || !customerName.trim()) {
+        return;
+      }
+
+      const customerPhone = prompt('📞 Telefon Numarası:\n\n(Opsiyonel - İptal için boş bırakabilirsiniz)');
+
+      const total = document.getElementById('total').textContent;
+      const itemCount = Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
+      const totalAmount = Object.values(cart).reduce((sum, item) => sum + (item.product.price * item.qty), 0);
+
+      const confirmMsg = `💰 Veresiye Kaydı Onayı\n\n👤 Müşteri: ${customerName.trim()}${customerPhone ? '\n📞 Telefon: ' + customerPhone.trim() : ''}\n📦 Ürün Sayısı: ${itemCount} adet\n💵 Toplam Tutar: ${totalAmount.toFixed(2)} ₺\n\nVeresiye kaydı oluşturulsun mu?\n\n⚠️ Katalog ürünleri stoktan düşecektir!`;
+      
+      if(!confirm(confirmMsg)) return;
+
+      // Hazırla: hem gerçek ürünler hem de hızlı ekleme ürünleri
+      // Gerçek ürünler için stok kontrolü yapılacak
+      const realItems = Object.values(cart)
+        .filter(item => typeof item.product.id === 'number' && item.product.id > 0)
+        .map(item => ({ 
+          id: item.product.id, 
+          qty: item.qty,
+          name: item.product.name,
+          price: item.product.price
+        }));
+
+      // Hızlı ekleme ürünleri (sadece fiyat olarak)
+      const quickItems = Object.values(cart)
+        .filter(item => typeof item.product.id === 'string' && item.product.id.startsWith('quick_'))
+        .map(item => ({ 
+          id: 0, // ID olmayan ürünler
+          qty: item.qty,
+          name: item.product.name,
+          price: item.product.price
+        }));
+
+      const allItems = [...realItems, ...quickItems];
+
+      if (allItems.length === 0) {
+        return;
+      }
+
+      try {
+        const resp = await fetch('credit-api.php?action=addCredit', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ 
+            customerName: customerName.trim(),
+            customerPhone: customerPhone ? customerPhone.trim() : '',
+            amount: totalAmount,
+            items: allItems
+          })
+        });
+        const result = await resp.json();
+        if (!result.success) throw new Error(result.message || 'Veresiye kayıt hatası');
+
+        cart = {}; renderCart(); saveCart();
+        flashStatus('Veresiye kaydı oluşturuldu! Sepet temizlendi.', true);
+
+        // Yeniden yükle: güncel stokları göster
+        await loadProducts();
+        renderCatalog(document.getElementById('search').value, document.getElementById('categoryFilter').value);
+      } catch (error) {
+        flashStatus('Veresiye kayıt hatası: ' + error.message, false);
+        try { await loadProducts(); renderCatalog(); } catch(e){}
+      }
+    });
+
+    // --- Search ---
+    document.getElementById('search').addEventListener('input', e=> {
+      const searchText = e.target.value;
+      const categoryFilter = document.getElementById('categoryFilter').value;
+      renderCatalog(searchText, categoryFilter);
+    });
+
+    // --- Category filter ---
+    document.getElementById('categoryFilter').addEventListener('change', e=> {
+      const categoryFilter = e.target.value;
+      const searchText = document.getElementById('search').value;
+      renderCatalog(searchText, categoryFilter);
+    });
+
+    // --- Quick add ---
+    document.getElementById('quickAdd').addEventListener('click', ()=>{
+      const name = (document.getElementById('quickName').value||'Hızlı Ürün').trim();
+      const priceRaw = document.getElementById('quickPrice').value.replace(',','.')||'';
+      const price = parseFloat(priceRaw);
+      if(!price || isNaN(price) || price <= 0){ 
+        flashStatus('⚠️ Geçerli bir fiyat girin', false); 
+        return; 
+      }
+      // create a temporary product with unlimited stock (no stock tracking for quick adds)
+      const id = 'quick_' + Date.now(); // use string ID to distinguish from regular products
+      const temp = {id, barcode:'', name, price, desc:'Hızlı ekleme', stock: Infinity};
+      // don't add to master products array; add directly to cart
+      addToCart(temp,1);
+      document.getElementById('quickName').value=''; 
+      document.getElementById('quickPrice').value='';
+      flashStatus(`✅ "${name}" sepete eklendi`, true);
+    });
+    
+    // Quick add with Enter key
+    document.getElementById('quickPrice').addEventListener('keydown', e=>{ 
+      if(e.key==='Enter') document.getElementById('quickAdd').click(); 
+    });
+
+    // --- Init ---
+    loadProducts(); // JSON'dan ürünleri yükle
+    loadCart(); 
+    renderCart();
+
+    // Focus on barcode input for easy scanning
+    barcodeInput.focus();
+
+    // Logging
+    console.log('%c🛒 Market Ödeme Otomasyonu - Ana Sayfa', 'color: #667eea; font-size: 18px; font-weight: bold;');
+    console.log('%c✨ Modern tasarım aktif!', 'color: #52c234; font-size: 14px;');
+
+    // Expose some helpers for debugging
+    window.__demo = {products, cart, addToCart, setQty, removeItem};
+  </script>
+</body>
+</html>

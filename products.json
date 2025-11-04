@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "barcode": "8690000000001",
+        "name": "Süt 1L",
+        "stock": 9,
+        "price": 29.9,
+        "desc": "Taze süt",
+        "category": "Süt Ürünleri",
+        "img": ""
+    },
+    {
+        "id": 2,
+        "barcode": "8690000000002",
+        "name": "Ekmek",
+        "stock": 16,
+        "price": 5.5,
+        "desc": "Günlük ekmek",
+        "category": "Gıda",
+        "img": ""
+    },
+    {
+        "id": 3,
+        "barcode": "8690000000003",
+        "name": "Peynir 200g",
+        "stock": 8,
+        "price": 49.9,
+        "desc": "Beyaz peynir",
+        "category": "Süt Ürünleri",
+        "img": ""
+    },
+    {
+        "id": 4,
+        "barcode": "8690000000004",
+        "name": "Çikolata",
+        "stock": 0,
+        "price": 12.75,
+        "desc": "Gofret",
+        "category": "Atıştırmalık",
+        "img": ""
+    },
+    {
+        "id": 5,
+        "barcode": "8690000000005",
+        "name": "Makarna 500g",
+        "stock": 11,
+        "price": 8.9,
+        "desc": "Durum buğdayı",
+        "category": "Gıda",
+        "img": ""
+    },
+    {
+        "id": 6,
+        "barcode": "1234567890128",
+        "name": "Su 0.5L",
+        "stock": 29,
+        "price": 3.25,
+        "desc": "Mineral su",
+        "category": "İçecek",
+        "img": ""
+    }
+]

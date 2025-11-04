@@ -1,0 +1,44 @@
+[
+    {
+        "id": 1,
+        "name": "Gıda",
+        "icon": "bi-basket-fill",
+        "color": "#52c234"
+    },
+    {
+        "id": 2,
+        "name": "İçecek",
+        "icon": "bi-cup-straw",
+        "color": "#0dcaf0"
+    },
+    {
+        "id": 3,
+        "name": "Temizlik",
+        "icon": "bi-droplet-fill",
+        "color": "#667eea"
+    },
+    {
+        "id": 4,
+        "name": "Kişisel Bakım",
+        "icon": "bi-heart-fill",
+        "color": "#f5576c"
+    },
+    {
+        "id": 5,
+        "name": "Atıştırmalık",
+        "icon": "bi-egg-fill",
+        "color": "#ffc107"
+    },
+    {
+        "id": 6,
+        "name": "Süt Ürünleri",
+        "icon": "bi-moisture",
+        "color": "#764ba2"
+    },
+    {
+        "id": 7,
+        "name": "Genel",
+        "icon": "bi-tag-fill",
+        "color": "#6c757d"
+    }
+]

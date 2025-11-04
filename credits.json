@@ -1,0 +1,21 @@
+[
+    {
+        "id": 1,
+        "customerName": "erdem",
+        "customerPhone": "",
+        "amount": 12.75,
+        "paid": 0,
+        "remaining": 12.75,
+        "items": [
+            {
+                "id": 4,
+                "qty": 1,
+                "name": "Çikolata",
+                "price": 12.75
+            }
+        ],
+        "createdAt": "2025-11-03 16:40:01",
+        "status": "open",
+        "payments": []
+    }
+]

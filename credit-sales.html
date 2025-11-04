@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Veresiye Yönetimi - Market Otomasyonu</title>
+  <!-- Bootstrap 5 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    :root{
+      --primary:#0d6efd; --success:#198754; --danger:#dc3545; --warning:#ffc107;
+      --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    *{box-sizing:border-box; margin:0; padding:0}
+    html,body{min-height:100vh}
+    body{
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--gradient-1);
+      color:#212529; padding:20px;
+    }
+    
+    /* Modern Header */
+    .header-card{
+      background:#fff;
+      border-radius:16px;
+      padding:20px;
+      margin-bottom:24px;
+      box-shadow:0 10px 40px rgba(0,0,0,0.2);
+    }
+    .brand{display:flex;gap:15px;align-items:center}
+    .logo{
+      width:60px;
+      height:60px;
+      border-radius:16px;
+      background:linear-gradient(135deg,#ffc107,#ff6b6b);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:28px;
+      color:#fff;
+      font-weight:bold;
+      box-shadow: 0 8px 16px rgba(255, 193, 7, 0.4);
+      transition: transform 0.3s ease;
+    }
+    .logo:hover{transform: scale(1.1) rotate(-5deg);}
+    h1{font-size:24px;margin:0;font-weight:800;color:#212529;letter-spacing:-0.5px}
+    p.lead{margin:4px 0 0 0;color:#6c757d;font-size:13px}
+    
+    /* Cards */
+    .card{
+      border-radius:20px;
+      box-shadow:0 10px 40px rgba(0,0,0,0.15);
+      border:none;
+      overflow:hidden;
+      transition: all 0.3s ease;
+    }
+    .card:hover{
+      box-shadow:0 15px 50px rgba(0,0,0,0.25);
+    }
+    .card .card-header{
+      border:none;
+      padding:16px 24px;
+      font-weight:700;
+      font-size:16px;
+    }
+    .card .card-body{
+      padding:24px;
+    }
+    
+    /* Credit Cards */
+    .credit-card{
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      border-left: 5px solid #667eea;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      animation: slideInRight 0.3s ease;
+    }
+    .credit-card:hover{
+      transform: translateX(5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .credit-card.status-open{border-left-color: #dc3545}
+    .credit-card.status-partial{border-left-color: #ffc107}
+    .credit-card.status-paid{border-left-color: #198754}
+    
+    /* Form Styling */
+    .form-control, .form-select{
+      border-radius:12px;
+      border:2px solid #e9ecef;
+      padding:12px 16px;
+      transition: all 0.3s ease;
+      font-size:15px;
+    }
+    .form-control:focus, .form-select:focus{
+      border-color:#667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      transform: scale(1.01);
+    }
+    
+    /* Buttons */
+    .btn{
+      border-radius:12px;
+      padding:12px 24px;
+      font-weight:600;
+      transition: all 0.3s ease;
+      border:none;
+    }
+    .btn-sm{padding:8px 16px;font-size:14px}
+    .btn:hover{transform: translateY(-2px);box-shadow: 0 6px 20px rgba(0,0,0,0.2)}
+    .btn:active{transform: translateY(0)}
+    .btn-success{background:linear-gradient(135deg, #52c234 0%, #198754 100%)}
+    .btn-warning{background:linear-gradient(135deg, #ffd89b 0%, #ffc107 100%);color:#212529}
+    .btn-primary{background:linear-gradient(135deg, #667eea 0%, #764ba2 100%)}
+    .btn-danger{background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%)}
+    .btn-info{background:linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)}
+    
+    .badge{
+      padding:8px 14px;
+      border-radius:10px;
+      font-weight:600;
+      font-size:13px;
+    }
+    
+    /* Stats Cards */
+    .stat-card{
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+    .stat-card.danger{background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%)}
+    .stat-card.warning{background: linear-gradient(135deg, #ffd89b 0%, #ffc107 100%)}
+    .stat-card.success{background: linear-gradient(135deg, #52c234 0%, #198754 100%)}
+    .stat-value{font-size: 32px; font-weight: 900; margin: 8px 0}
+    .stat-label{font-size: 14px; opacity: 0.9}
+    
+    /* Payment History */
+    .payment-item{
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 8px;
+      border-left: 3px solid #198754;
+    }
+    
+    /* Animations */
+    @keyframes slideInRight {
+      from {opacity: 0; transform: translateX(-20px)}
+      to {opacity: 1; transform: translateX(0)}
+    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar {width: 8px; height: 8px}
+    ::-webkit-scrollbar-track {background: #f1f1f1; border-radius: 10px}
+    ::-webkit-scrollbar-thumb {background: #667eea; border-radius: 10px}
+    ::-webkit-scrollbar-thumb:hover {background: #764ba2}
+    
+    /* Responsive */
+    @media (max-width:768px){
+      body{padding:12px}
+      h1{font-size:20px}
+      .card .card-body{padding:20px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="header-card">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div class="brand">
+          <div class="logo"><i class="bi bi-cash-coin"></i></div>
+          <div>
+            <h1>Veresiye Yönetimi</h1>
+            <p class="lead">Müşteri borç takibi ve ödeme yönetimi</p>
+          </div>
+        </div>
+        <a href="index.html" class="btn btn-primary">
+          <i class="bi bi-arrow-left"></i> Ana Sayfaya Dön
+        </a>
+      </div>
+    </div>
+
+    <!-- İstatistikler -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="stat-card">
+          <i class="bi bi-people-fill fs-1 mb-2"></i>
+          <div class="stat-value" id="totalCustomers">0</div>
+          <div class="stat-label">Toplam Müşteri</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card danger">
+          <i class="bi bi-currency-dollar fs-1 mb-2"></i>
+          <div class="stat-value" id="totalDebt">0 ₺</div>
+          <div class="stat-label">Toplam Borç</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card warning">
+          <i class="bi bi-clock-history fs-1 mb-2"></i>
+          <div class="stat-value" id="partialPayments">0</div>
+          <div class="stat-label">Kısmi Ödemeli</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card success">
+          <i class="bi bi-check-circle-fill fs-1 mb-2"></i>
+          <div class="stat-value" id="paidCount">0</div>
+          <div class="stat-label">Ödenen Kayıt</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <!-- Veresiye Listesi -->
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-list-ul"></i> Veresiye Kayıtları</h5>
+            <div>
+              <select id="statusFilter" class="form-select form-select-sm d-inline-block" style="width:auto">
+                <option value="">Tümü</option>
+                <option value="open">Açık</option>
+                <option value="partial">Kısmi Ödemeli</option>
+                <option value="paid">Ödendi</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <input type="text" id="searchCustomer" class="form-control" placeholder="Müşteri adı ile ara...">
+            </div>
+            <div id="creditList" style="max-height:600px;overflow-y:auto"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ödeme Al Paneli -->
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0"><i class="bi bi-credit-card-fill"></i> Ödeme Al</h5>
+          </div>
+          <div class="card-body">
+            <div id="paymentSection">
+              <div class="text-center py-5">
+                <i class="bi bi-hand-index fs-1 text-muted mb-3 d-block"></i>
+                <p class="text-muted">Ödeme almak için bir veresiye kaydı seçin</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div class="modal fade" id="paymentModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content" style="border-radius:20px">
+        <div class="modal-header border-0">
+          <h5 class="modal-title"><i class="bi bi-credit-card-fill"></i> Ödeme Al</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label fw-bold">Müşteri</label>
+            <input type="text" id="modalCustomerName" class="form-control" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Kalan Borç</label>
+            <input type="text" id="modalRemaining" class="form-control" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Ödeme Tutarı <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text">₺</span>
+              <input type="number" id="modalPaymentAmount" class="form-control" placeholder="0.00" step="0.01" min="0">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Not (Opsiyonel)</label>
+            <textarea id="modalPaymentNote" class="form-control" rows="2" placeholder="Ödeme notu..."></textarea>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-primary flex-fill" onclick="quickFillAmount('full')">
+              <i class="bi bi-check-all"></i> Tümünü Öde
+            </button>
+            <button type="button" class="btn btn-outline-primary" onclick="quickFillAmount('half')">
+              <i class="bi bi-percent"></i> Yarısı
+            </button>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+          <button type="button" class="btn btn-success" id="confirmPaymentBtn">
+            <i class="bi bi-check-circle-fill"></i> Ödemeyi Kaydet
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let credits = [];
+    let selectedCredit = null;
+    const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+
+    // Veresiye kayıtlarını yükle
+    async function loadCredits() {
+      try {
+        const response = await fetch('credit-api.php?action=getCredits');
+        if (!response.ok) throw new Error('Veriler yüklenemedi');
+        const result = await response.json();
+        if (!result.success) throw new Error(result.message);
+        
+        credits = result.data;
+        renderCredits();
+        updateStats();
+        console.log('Veresiye kayıtları yüklendi:', credits.length, 'adet');
+      } catch (error) {
+        console.error('Yükleme hatası:', error);
+      }
+    }
+
+    // İstatistikleri güncelle
+    function updateStats() {
+      const totalCustomers = credits.length;
+      const totalDebt = credits.reduce((sum, c) => sum + (c.remaining || 0), 0);
+      const partialPayments = credits.filter(c => c.status === 'partial').length;
+      const paidCount = credits.filter(c => c.status === 'paid').length;
+
+      document.getElementById('totalCustomers').textContent = totalCustomers;
+      document.getElementById('totalDebt').textContent = totalDebt.toFixed(2) + ' ₺';
+      document.getElementById('partialPayments').textContent = partialPayments;
+      document.getElementById('paidCount').textContent = paidCount;
+    }
+
+    // Veresiye kayıtlarını render et
+    function renderCredits() {
+      const listEl = document.getElementById('creditList');
+      const searchText = document.getElementById('searchCustomer').value.toLowerCase();
+      const statusFilter = document.getElementById('statusFilter').value;
+      
+      let filteredCredits = credits.filter(c => {
+        const matchesSearch = c.customerName.toLowerCase().includes(searchText) || 
+                             (c.customerPhone && c.customerPhone.includes(searchText));
+        const matchesStatus = !statusFilter || c.status === statusFilter;
+        return matchesSearch && matchesStatus;
+      });
+
+      if (filteredCredits.length === 0) {
+        listEl.innerHTML = `
+          <div class="text-center py-5">
+            <i class="bi bi-inbox fs-1 text-muted mb-3 d-block"></i>
+            <h6 class="text-muted">Veresiye kaydı bulunamadı</h6>
+            <p class="small text-muted">Ana sayfadan "Veresiye Yaz" butonuyla yeni kayıt oluşturabilirsiniz</p>
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = '';
+      filteredCredits.forEach((credit, index) => {
+        const statusColors = {
+          'open': 'danger',
+          'partial': 'warning',
+          'paid': 'success'
+        };
+        const statusTexts = {
+          'open': 'Açık',
+          'partial': 'Kısmi Ödemeli',
+          'paid': 'Ödendi'
+        };
+        const statusIcons = {
+          'open': 'exclamation-circle-fill',
+          'partial': 'clock-history',
+          'paid': 'check-circle-fill'
+        };
+
+        const card = document.createElement('div');
+        card.className = `credit-card status-${credit.status}`;
+        card.style.animationDelay = `${index * 0.05}s`;
+        
+        const paymentHistory = (credit.payments && credit.payments.length > 0) ? `
+          <div class="mt-3">
+            <small class="text-muted fw-bold d-block mb-2"><i class="bi bi-clock-history"></i> Ödeme Geçmişi</small>
+            ${credit.payments.map(p => `
+              <div class="payment-item">
+                <div class="d-flex justify-content-between">
+                  <span class="fw-bold text-success">${p.amount.toFixed(2)} ₺</span>
+                  <small class="text-muted">${new Date(p.date).toLocaleString('tr-TR')}</small>
+                </div>
+                ${p.note ? `<small class="text-muted">${p.note}</small>` : ''}
+              </div>
+            `).join('')}
+          </div>
+        ` : '';
+
+        card.innerHTML = `
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="flex-grow-1">
+              <h5 class="fw-bold mb-1">
+                <i class="bi bi-person-circle"></i> ${credit.customerName}
+              </h5>
+              ${credit.customerPhone ? `<p class="text-muted mb-1 small"><i class="bi bi-telephone-fill"></i> ${credit.customerPhone}</p>` : ''}
+              <p class="text-muted mb-0 small">
+                <i class="bi bi-calendar"></i> ${new Date(credit.createdAt).toLocaleDateString('tr-TR')}
+              </p>
+            </div>
+            <span class="badge bg-${statusColors[credit.status]}">
+              <i class="bi bi-${statusIcons[credit.status]}"></i> ${statusTexts[credit.status]}
+            </span>
+          </div>
+          
+          <div class="row g-3 mb-3">
+            <div class="col-4">
+              <small class="text-muted d-block">Toplam</small>
+              <strong class="fs-6">${credit.amount.toFixed(2)} ₺</strong>
+            </div>
+            <div class="col-4">
+              <small class="text-muted d-block">Ödenen</small>
+              <strong class="fs-6 text-success">${credit.paid.toFixed(2)} ₺</strong>
+            </div>
+            <div class="col-4">
+              <small class="text-muted d-block">Kalan</small>
+              <strong class="fs-6 text-danger">${credit.remaining.toFixed(2)} ₺</strong>
+            </div>
+          </div>
+
+          ${paymentHistory}
+
+          <div class="d-flex gap-2 mt-3">
+            ${credit.status !== 'paid' ? `
+              <button class="btn btn-success btn-sm flex-fill" onclick="openPaymentModal(${credit.id})">
+                <i class="bi bi-credit-card-fill"></i> Ödeme Al
+              </button>
+            ` : `
+              <button class="btn btn-danger btn-sm flex-fill" onclick="deleteCredit(${credit.id})">
+                <i class="bi bi-trash-fill"></i> Kaydı Sil
+              </button>
+            `}
+            <button class="btn btn-info btn-sm" onclick="viewDetails(${credit.id})">
+              <i class="bi bi-eye-fill"></i> Detay
+            </button>
+          </div>
+        `;
+        
+        listEl.appendChild(card);
+      });
+    }
+
+    // Ödeme modalını aç
+    function openPaymentModal(creditId) {
+      selectedCredit = credits.find(c => c.id === creditId);
+      if (!selectedCredit) return;
+
+      document.getElementById('modalCustomerName').value = selectedCredit.customerName;
+      document.getElementById('modalRemaining').value = selectedCredit.remaining.toFixed(2) + ' ₺';
+      document.getElementById('modalPaymentAmount').value = '';
+      document.getElementById('modalPaymentAmount').max = selectedCredit.remaining;
+      document.getElementById('modalPaymentNote').value = '';
+
+      paymentModal.show();
+    }
+
+    // Hızlı tutar doldur
+    function quickFillAmount(type) {
+      if (!selectedCredit) return;
+      
+      const amountInput = document.getElementById('modalPaymentAmount');
+      if (type === 'full') {
+        amountInput.value = selectedCredit.remaining.toFixed(2);
+      } else if (type === 'half') {
+        amountInput.value = (selectedCredit.remaining / 2).toFixed(2);
+      }
+    }
+
+    // Ödemeyi kaydet
+    document.getElementById('confirmPaymentBtn').addEventListener('click', async () => {
+      if (!selectedCredit) return;
+
+      const amount = parseFloat(document.getElementById('modalPaymentAmount').value);
+      const note = document.getElementById('modalPaymentNote').value.trim();
+
+      if (!amount || amount <= 0) {
+        return;
+      }
+
+      if (amount > selectedCredit.remaining) {
+        return;
+      }
+
+      try {
+        const response = await fetch('credit-api.php?action=makePayment', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            id: selectedCredit.id,
+            amount: amount,
+            note: note
+          })
+        });
+
+        const result = await response.json();
+        if (!result.success) throw new Error(result.message);
+
+        paymentModal.hide();
+        selectedCredit = null;
+        await loadCredits();
+      } catch (error) {
+        console.error('Ödeme hatası:', error);
+      }
+    });
+
+    // Veresiye kaydını sil
+    async function deleteCredit(creditId) {
+      const credit = credits.find(c => c.id === creditId);
+      if (!credit) return;
+
+      if (!confirm(`🗑️ Veresiye Kaydını Sil\n\n${credit.customerName}\nToplam: ${credit.amount.toFixed(2)} ₺\n\nBu kayıt kalıcı olarak silinecek. Devam edilsin mi?`)) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`credit-api.php?action=deleteCredit&id=${creditId}`, {
+          method: 'GET'
+        });
+
+        const result = await response.json();
+        if (!result.success) throw new Error(result.message);
+
+        await loadCredits();
+      } catch (error) {
+        console.error('Silme hatası:', error);
+      }
+    }
+
+    // Detayları göster
+    function viewDetails(creditId) {
+      const credit = credits.find(c => c.id === creditId);
+      if (!credit) return;
+
+      let itemsText = '';
+      if (credit.items && credit.items.length > 0) {
+        itemsText = '\n\n📦 Ürünler:\n' + credit.items.map(item => 
+          `• ${item.name || 'ID: ' + item.id} x${item.qty}`
+        ).join('\n');
+      }
+
+      let paymentsText = '';
+      if (credit.payments && credit.payments.length > 0) {
+        paymentsText = '\n\n💳 Ödemeler:\n' + credit.payments.map(p => 
+          `• ${p.amount.toFixed(2)} ₺ - ${new Date(p.date).toLocaleString('tr-TR')}${p.note ? '\n  ' + p.note : ''}`
+        ).join('\n');
+      }
+
+      alert(`📋 Veresiye Detayları
+
+👤 Müşteri: ${credit.customerName}
+${credit.customerPhone ? '📞 Telefon: ' + credit.customerPhone : ''}
+📅 Tarih: ${new Date(credit.createdAt).toLocaleString('tr-TR')}
+
+💰 Toplam: ${credit.amount.toFixed(2)} ₺
+✅ Ödenen: ${credit.paid.toFixed(2)} ₺
+❌ Kalan: ${credit.remaining.toFixed(2)} ₺
+${itemsText}${paymentsText}`);
+    }
+
+    // Arama ve filtre
+    document.getElementById('searchCustomer').addEventListener('input', renderCredits);
+    document.getElementById('statusFilter').addEventListener('change', renderCredits);
+
+    // Başlangıç
+    loadCredits();
+
+    console.log('%c💰 Veresiye Yönetimi Sistemi', 'color: #ffc107; font-size: 18px; font-weight: bold;');
+  </script>
+</body>
+</html>

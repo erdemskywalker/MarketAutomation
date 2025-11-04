@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ürün Düzenle - Market Ödeme Otomasyonu</title>
+  <!-- Bootstrap 5 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    :root{
+      --primary:#0d6efd; --success:#198754; --danger:#dc3545; --warning:#ffc107; --info:#0dcaf0;
+      --dark:#212529; --light:#f8f9fa; --muted:#6c757d;
+      --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --gradient-warning: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+    }
+    *{box-sizing:border-box; margin:0; padding:0}
+    html,body{min-height:100vh}
+    body{
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--gradient-1);
+      color:#212529; padding:20px;
+    }
+    
+    /* Modern Header */
+    .header-card{
+      background:#fff;
+      border-radius:16px;
+      padding:20px;
+      margin-bottom:24px;
+      box-shadow:0 10px 40px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .brand{display:flex;gap:15px;align-items:center}
+    .logo{
+      width:60px;
+      height:60px;
+      border-radius:16px;
+      background:linear-gradient(135deg,#ffd89b,#19547b);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:28px;
+      color:#fff;
+      font-weight:bold;
+      box-shadow: 0 8px 16px rgba(255, 193, 7, 0.4);
+      transition: transform 0.3s ease;
+    }
+    .logo:hover{transform: scale(1.1) rotate(-5deg);}
+    h1{font-size:24px;margin:0;font-weight:800;color:#212529;letter-spacing:-0.5px}
+    p.lead{margin:4px 0 0 0;color:#6c757d;font-size:13px}
+    
+    /* Navigation Buttons */
+    .nav-buttons{display:flex;gap:10px;flex-wrap:wrap}
+    .nav-buttons .btn{
+      border-radius:12px;
+      padding:10px 20px;
+      font-weight:600;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+    .nav-buttons .btn:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    
+    /* Modern Cards */
+    .modern-card{
+      background:#fff;
+      border-radius:20px;
+      box-shadow:0 10px 40px rgba(0,0,0,0.15);
+      border:none;
+      overflow:hidden;
+      transition: all 0.3s ease;
+    }
+    .modern-card:hover{
+      box-shadow:0 15px 50px rgba(0,0,0,0.25);
+    }
+    .modern-card .card-header{
+      border:none;
+      border-radius:0;
+      padding:20px;
+      font-weight:700;
+    }
+    .modern-card .card-body{padding:30px}
+    
+    /* Product Cards */
+    .product-card{
+      cursor:pointer;
+      transition: all 0.3s ease;
+      border: 2px solid #e9ecef;
+      border-radius:12px;
+      margin-bottom:12px;
+      background:#fff;
+    }
+    .product-card:hover{
+      transform: translateX(5px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      border-color: #667eea;
+    }
+    .product-card.selected{
+      border-color: #ffc107;
+      background: linear-gradient(135deg, #fff9e6 0%, #fff 100%);
+      box-shadow: 0 6px 25px rgba(255, 193, 7, 0.3);
+      transform: translateX(8px);
+    }
+    
+    /* Form Styling */
+    .form-label{
+      font-weight:700;
+      color:#212529;
+      margin-bottom:8px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .form-control, .form-select{
+      border-radius:12px;
+      border:2px solid #e9ecef;
+      padding:12px 16px;
+      transition: all 0.3s ease;
+      font-size:15px;
+    }
+    .form-control:focus, .form-select:focus{
+      border-color:#ffc107;
+      box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.1);
+      transform: scale(1.01);
+    }
+    
+    /* Buttons */
+    .btn{
+      border-radius:12px;
+      padding:12px 24px;
+      font-weight:600;
+      transition: all 0.3s ease;
+      border:none;
+    }
+    .btn-lg{padding:16px 32px;font-size:16px}
+    .btn:hover{transform: translateY(-2px);box-shadow: 0 6px 20px rgba(0,0,0,0.2)}
+    .btn:active{transform: translateY(0)}
+    
+    .btn-warning{background:linear-gradient(135deg, #ffd89b 0%, #ffc107 100%);color:#212529}
+    .btn-primary{background:linear-gradient(135deg, #667eea 0%, #764ba2 100%)}
+    .btn-danger{background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%)}
+    .btn-success{background:linear-gradient(135deg, #52c234 0%, #198754 100%)}
+    
+    /* Search Box */
+    .search-box{
+      border-radius:12px;
+      border:2px solid #e9ecef;
+      transition: all 0.3s ease;
+    }
+    .search-box:focus-within{
+      border-color:#667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+    
+    /* Alert Animations */
+    .alert{
+      border-radius:12px;
+      border:none;
+      padding:16px 20px;
+      animation: slideInDown 0.3s ease;
+    }
+    @keyframes slideInDown {
+      from {opacity: 0; transform: translateY(-20px)}
+      to {opacity: 1; transform: translateY(0)}
+    }
+    @keyframes slideInRight {
+      from {opacity: 0; transform: translateX(-20px)}
+      to {opacity: 1; transform: translateX(0)}
+    }
+    
+    .badge{
+      padding:6px 12px;
+      border-radius:8px;
+      font-weight:600;
+      font-size:12px;
+    }
+    
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {width: 8px; height: 8px}
+    ::-webkit-scrollbar-track {background: #f1f1f1; border-radius: 10px}
+    ::-webkit-scrollbar-thumb {background: #667eea; border-radius: 10px}
+    ::-webkit-scrollbar-thumb:hover {background: #764ba2}
+    
+    /* Responsive */
+    @media (max-width:768px){
+      h1{font-size:20px}
+      .nav-buttons{justify-content:center;width:100%;margin-top:15px}
+      .nav-buttons .btn{flex:1;min-width:140px}
+      body{padding:12px}
+      .modern-card .card-body{padding:20px}
+    }
+    
+    /* Loading Animation */
+    .spinner-border-sm{width:1rem;height:1rem;border-width:2px}
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="header-card">
+      <div class="d-flex justify-content-between align-items-center flex-wrap">
+        <div class="brand">
+          <div class="logo"><i class="bi bi-pencil-square"></i></div>
+          <div>
+            <h1>Ürün Düzenle & Sil</h1>
+            <p class="lead">Mevcut ürünleri düzenleyin veya silin</p>
+          </div>
+        </div>
+        <div class="nav-buttons">
+          <a href="index.html" class="btn btn-primary">
+            <i class="bi bi-house-fill"></i> Ana Sayfa
+          </a>
+          <a href="add-product.html" class="btn btn-outline-success">
+            <i class="bi bi-plus-circle-fill"></i> Yeni Ürün Ekle
+          </a>
+          <a href="categories.html" class="btn btn-outline-info">
+            <i class="bi bi-bookmarks-fill"></i> Kategoriler
+          </a>
+          <a href="sales-report.html" class="btn btn-outline-success">
+            <i class="bi bi-graph-up-arrow"></i> Satış Raporları
+          </a>
+          <a href="credit-sales.html" class="btn btn-outline-warning">
+            <i class="bi bi-cash-coin"></i> Veresiyeler
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Sol Panel: Ürün Listesi -->
+      <div class="col-lg-5">
+        <div class="modern-card card">
+          <div class="card-header text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0"><i class="bi bi-list-ul"></i> Ürün Listesi</h5>
+              <span class="badge bg-light text-dark fs-6">
+                <i class="bi bi-box-seam"></i> <span id="productCount">0</span> Ürün
+              </span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="input-group search-box mb-3">
+              <span class="input-group-text bg-white border-0"><i class="bi bi-search"></i></span>
+              <input id="searchProduct" class="form-control border-0" placeholder="Ürün ara... (isim, barkod, açıklama)">
+            </div>
+            
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle-fill"></i> <small>Düzenlemek için bir ürüne tıklayın</small>
+            </div>
+            
+            <div id="productListContainer" style="max-height:550px;overflow-y:auto">
+              <!-- Ürünler buraya gelecek -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sağ Panel: Düzenleme Formu -->
+      <div class="col-lg-7">
+        <div class="modern-card card">
+          <div class="card-header text-dark" style="background: linear-gradient(135deg, #ffd89b 0%, #ffc107 100%)">
+            <h5 class="mb-0"><i class="bi bi-pencil-fill"></i> Düzenleme Formu</h5>
+          </div>
+          <div class="card-body">
+            <div id="alertContainer"></div>
+
+            <div id="noSelection" class="text-center py-5">
+              <i class="bi bi-hand-index-thumb fs-1 text-warning d-block mb-3"></i>
+              <h5 class="text-muted">Düzenlemek için soldaki listeden bir ürün seçin</h5>
+              <p class="small text-muted">Ürün kartına tıklayarak düzenleme formunu açabilirsiniz</p>
+            </div>
+
+            <form id="editForm" style="display:none">
+              <input type="hidden" id="editId">
+              
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="editBarcode" class="form-label">
+                    <i class="bi bi-upc-scan"></i> Barkod Numarası
+                  </label>
+                  <input type="text" class="form-control form-control-lg" id="editBarcode" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="editPrice" class="form-label">
+                    <i class="bi bi-cash-coin"></i> Fiyat (₺)
+                  </label>
+                  <input type="number" class="form-control form-control-lg" id="editPrice" 
+                         step="0.01" min="0" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="editStock" class="form-label">
+                    <i class="bi bi-box-seam"></i> Stok Adedi
+                  </label>
+                  <input type="number" class="form-control form-control-lg" id="editStock" step="1" min="0" value="0">
+                </div>
+
+                <div class="col-12">
+                  <label for="editName" class="form-label">
+                    <i class="bi bi-tag-fill"></i> Ürün Adı
+                  </label>
+                  <input type="text" class="form-control form-control-lg" id="editName" required>
+                </div>
+
+                <div class="col-12">
+                  <label for="editCategory" class="form-label">
+                    <i class="bi bi-bookmarks-fill"></i> Kategori
+                  </label>
+                  <select class="form-select form-select-lg" id="editCategory" required>
+                    <option value="">Kategori seçin...</option>
+                  </select>
+                </div>
+
+                <div class="col-12">
+                  <label for="editDesc" class="form-label">
+                    <i class="bi bi-card-text"></i> Açıklama
+                  </label>
+                  <textarea class="form-control" id="editDesc" rows="3"></textarea>
+                </div>
+
+                <div class="col-12">
+                  <label for="editImg" class="form-label">
+                    <i class="bi bi-image-fill"></i> Resim URL (Opsiyonel)
+                  </label>
+                  <input type="text" class="form-control" id="editImg">
+                </div>
+              </div>
+
+              <div class="d-grid gap-3 mt-4">
+                <button type="submit" class="btn btn-warning btn-lg">
+                  <i class="bi bi-check-circle-fill"></i> Değişiklikleri Kaydet
+                </button>
+                <button type="button" id="deleteBtn" class="btn btn-danger">
+                  <i class="bi bi-trash-fill"></i> Ürünü Sil
+                </button>
+                <button type="button" id="cancelBtn" class="btn btn-outline-secondary">
+                  <i class="bi bi-x-circle"></i> İptal
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let products = [];
+    let categories = [];
+    let selectedProductId = null;
+
+    // Verileri yükle
+    async function loadData() {
+      try {
+        const [prodResponse, catResponse] = await Promise.all([
+          fetch('api.php?action=getProducts'),
+          fetch('category-api.php?action=getCategories')
+        ]);
+        
+        const prodData = await prodResponse.json();
+        const catData = await catResponse.json();
+        
+        if (prodData.success) products = prodData.data;
+        if (catData.success) {
+          categories = catData.data;
+          renderCategorySelect();
+        }
+        
+        renderProductList();
+        console.log('✅ Veriler yüklendi');
+      } catch (error) {
+        console.error('❌ Hata:', error);
+        showAlert('Veriler yüklenemedi!', 'danger');
+      }
+    }
+
+    // Kategori select'ini doldur
+    function renderCategorySelect() {
+      const select = document.getElementById('editCategory');
+      select.innerHTML = '<option value="">Kategori seçin...</option>';
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.name;
+        option.textContent = cat.name;
+        select.appendChild(option);
+      });
+    }
+
+    // Ürün listesini render et
+    function renderProductList(filter = '') {
+      const container = document.getElementById('productListContainer');
+      const countEl = document.getElementById('productCount');
+      
+      container.innerHTML = '';
+      
+      const filteredProducts = products.filter(p => 
+        (p.name + p.desc + p.barcode + (p.category || '')).toLowerCase().includes(filter.toLowerCase())
+      );
+      
+      countEl.textContent = filteredProducts.length;
+
+      if (filteredProducts.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-5">
+            <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
+            <p class="text-muted">${filter ? 'Arama sonucu bulunamadı' : 'Henüz ürün eklenmemiş'}</p>
+          </div>
+        `;
+        return;
+      }
+
+      filteredProducts.forEach((p, index) => {
+        const category = categories.find(c => c.name === p.category);
+        const categoryBadge = category 
+          ? `<span class="badge mb-1" style="background-color: ${category.color}"><i class="${category.icon}"></i> ${p.category}</span>`
+          : `<span class="badge bg-secondary mb-1">${p.category || 'Genel'}</span>`;
+        
+        const card = document.createElement('div');
+        card.className = `product-card ${selectedProductId === p.id ? 'selected' : ''}`;
+        card.style.animation = `slideInRight 0.3s ease ${index * 0.05}s both`;
+        card.innerHTML = `
+          <div class="card-body p-3">
+            <div class="d-flex justify-content-between align-items-start">
+              <div class="flex-grow-1">
+                <h6 class="fw-bold mb-1" style="color: #667eea">${p.name}</h6>
+                ${categoryBadge}
+                <p class="text-muted small mb-2">${p.desc || 'Açıklama yok'}</p>
+                <span class="badge bg-dark"><i class="bi bi-upc-scan"></i> ${p.barcode}</span>
+              </div>
+              <div class="text-end ms-3">
+                <h5 class="text-success fw-bold mb-0">${p.price.toFixed(2)} ₺</h5>
+                <small class="text-muted">ID: ${p.id}</small>
+              </div>
+            </div>
+          </div>
+        `;
+        card.addEventListener('click', () => selectProduct(p.id));
+        container.appendChild(card);
+      });
+    }
+
+    // Ürün seç
+    function selectProduct(id) {
+      selectedProductId = id;
+      const product = products.find(p => p.id === id);
+      
+      if (!product) return;
+
+      renderProductList(document.getElementById('searchProduct').value);
+
+      document.getElementById('noSelection').style.display = 'none';
+      document.getElementById('editForm').style.display = 'block';
+
+      document.getElementById('editId').value = product.id;
+      document.getElementById('editBarcode').value = product.barcode;
+      document.getElementById('editName').value = product.name;
+      document.getElementById('editCategory').value = product.category || '';
+      document.getElementById('editDesc').value = product.desc || '';
+      document.getElementById('editPrice').value = product.price;
+  document.getElementById('editStock').value = product.stock || 0;
+      document.getElementById('editImg').value = product.img || '';
+
+      document.getElementById('editBarcode').focus();
+      console.log('📝 Seçildi:', product);
+    }
+
+    // İptal
+    function cancelSelection() {
+      selectedProductId = null;
+      document.getElementById('noSelection').style.display = 'block';
+      document.getElementById('editForm').style.display = 'none';
+      renderProductList(document.getElementById('searchProduct').value);
+    }
+
+    // Alert
+    function showAlert(message, type = 'success') {
+      const alertContainer = document.getElementById('alertContainer');
+      const alertEl = document.createElement('div');
+      alertEl.className = `alert alert-${type} alert-dismissible fade show`;
+      alertEl.innerHTML = `
+        <i class="bi ${type === 'success' ? 'bi-check-circle-fill' : type === 'warning' ? 'bi-exclamation-triangle-fill' : 'bi-x-circle-fill'}"></i>
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      `;
+      alertContainer.appendChild(alertEl);
+      setTimeout(() => alertEl.remove(), 5000);
+    }
+
+    // Form submit - Güncelleme
+    document.getElementById('editForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Kaydediliyor...';
+
+      const updatedProduct = {
+        id: parseInt(document.getElementById('editId').value),
+        barcode: document.getElementById('editBarcode').value.trim(),
+        name: document.getElementById('editName').value.trim(),
+        category: document.getElementById('editCategory').value,
+        desc: document.getElementById('editDesc').value.trim(),
+        price: parseFloat(document.getElementById('editPrice').value),
+        stock: Math.max(0, parseInt(document.getElementById('editStock').value) || 0),
+        img: document.getElementById('editImg').value.trim()
+      };
+
+      if (!updatedProduct.barcode || !updatedProduct.name || !updatedProduct.price || !updatedProduct.category) {
+        showAlert('⚠️ Lütfen tüm zorunlu alanları doldurun!', 'warning');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+        return;
+      }
+
+      try {
+        const response = await fetch('api.php?action=updateProduct', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(updatedProduct)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showAlert(`✅ "${updatedProduct.name}" başarıyla güncellendi!`, 'success');
+          const index = products.findIndex(p => p.id === updatedProduct.id);
+          if (index !== -1) products[index] = result.data;
+          renderProductList(document.getElementById('searchProduct').value);
+          console.log('✅ Güncellendi:', result.data);
+        } else {
+          throw new Error(result.message);
+        }
+      } catch (error) {
+        showAlert('❌ Hata: ' + error.message, 'danger');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }
+    });
+
+    // Silme
+    document.getElementById('deleteBtn').addEventListener('click', async function() {
+      const id = parseInt(document.getElementById('editId').value);
+      const product = products.find(p => p.id === id);
+
+      if (!product || !confirm(`"${product.name}" ürününü silmek istediğinizden emin misiniz?`)) return;
+
+      const deleteBtn = this;
+      const originalText = deleteBtn.innerHTML;
+      deleteBtn.disabled = true;
+      deleteBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Siliniyor...';
+
+      try {
+        const response = await fetch(`api.php?action=deleteProduct&id=${id}`);
+        const result = await response.json();
+
+        if (result.success) {
+          showAlert(`🗑️ "${product.name}" silindi!`, 'success');
+          products = products.filter(p => p.id !== id);
+          cancelSelection();
+          console.log('🗑️ Silindi:', result.data);
+        } else {
+          throw new Error(result.message);
+        }
+      } catch (error) {
+        showAlert('❌ Hata: ' + error.message, 'danger');
+      } finally {
+        deleteBtn.disabled = false;
+        deleteBtn.innerHTML = originalText;
+      }
+    });
+
+    document.getElementById('cancelBtn').addEventListener('click', cancelSelection);
+    document.getElementById('searchProduct').addEventListener('input', e => renderProductList(e.target.value));
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadData();
+      console.log('%c✏️ Ürün Düzenleme - PHP API ile çalışıyor', 'color: #ffc107; font-size: 18px; font-weight: bold;');
+    });
+  </script>
+</body>
+</html>
